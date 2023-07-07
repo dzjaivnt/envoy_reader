@@ -82,8 +82,7 @@ class EnvoyReader:  # pylint: disable=too-many-instance-attributes
         enlighten_user=None,
         enlighten_pass=None,
         commissioned=False,
-        enlighten_site_id=None,
-        enlighten_serial_num=None,
+        enlighten_site_name=None,
         https_flag="",
     ):
         """Init the EnvoyReader."""
@@ -103,8 +102,8 @@ class EnvoyReader:  # pylint: disable=too-many-instance-attributes
         self.enlighten_user = enlighten_user
         self.enlighten_pass = enlighten_pass
         self.commissioned = commissioned
-        self.enlighten_site_id = enlighten_site_id
-        self.enlighten_serial_num = enlighten_serial_num
+        self.enlighten_site_name = enlighten_site_name
+        self.enlighten_serial_num = None
         self.https_flag = https_flag
         self._token = ""
 
@@ -196,8 +195,9 @@ class EnvoyReader:  # pylint: disable=too-many-instance-attributes
         resp = await self._async_post(LOGIN_URL, data=payload_login)
 
         if self.commissioned == "True" or self.commissioned == "Commissioned":
+            self.enlighten_serial_num = await self.get_full_serial_number()
             payload_token = {
-                "Site": self.enlighten_site_id,
+                "Site": self.enlighten_site_name,
                 "serialNum": self.enlighten_serial_num,
             }
             response = await self._async_post(
@@ -401,6 +401,7 @@ class EnvoyReader:  # pylint: disable=too-many-instance-attributes
             return response.text.split("<sn>")[1].split("</sn>")[0]
         match = SERIAL_REGEX.search(response.text)
         if match:
+            self.enlighten_serial_num = match.group(1)
             return match.group(1)
 
     def create_connect_errormessage(self):
@@ -705,7 +706,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-i",
         "--siteid",
-        dest="enlighten_site_id",
+        dest="enlighten_site_name",
         help="Enlighten Site ID. Only used when Commissioned=True.",
     )
     parser.add_argument(
@@ -752,8 +753,7 @@ if __name__ == "__main__":
             enlighten_user=args.enlighten_user,
             enlighten_pass=args.enlighten_pass,
             commissioned=args.commissioned,
-            enlighten_site_id=args.enlighten_site_id,
-            enlighten_serial_num=args.enlighten_serial_num,
+            enlighten_site_name=args.enlighten_site_name,
             https_flag=SECURE,
         )
     else:
@@ -765,8 +765,7 @@ if __name__ == "__main__":
             enlighten_user=args.enlighten_user,
             enlighten_pass=args.enlighten_pass,
             commissioned=args.commissioned,
-            enlighten_site_id=args.enlighten_site_id,
-            enlighten_serial_num=args.enlighten_serial_num,
+            enlighten_site_name=args.enlighten_site_name,
             https_flag=SECURE,
         )
 
