@@ -1,5 +1,5 @@
-[![Build Main](https://github.com/jesserizzo/envoy_reader/actions/workflows/build-main.yml/badge.svg)](https://github.com/jesserizzo/envoy_reader/actions/workflows/build-main.yml)
-[![Latest Release](https://img.shields.io/github/v/release/jesserizzo/envoy_reader)](https://img.shields.io/github/v/release/jesserizzo/envoy_reader)
+[![Build Main](https://github.com/dzjaivnt/envoy_reader/actions/workflows/build-main.yml/badge.svg)](https://github.com/dzjaivnt/envoy_reader/actions/workflows/build-main.yml)
+[![Latest Release](https://img.shields.io/github/v/release/dzjaivnt/envoy_reader)](https://img.shields.io/github/v/release/dzjaivnt/envoy_reader)
 
 A program to read from an Enphase Envoy on the local network. Reads electricity production and consumption (if available) for the current moment, current day, the last seven days, and the lifetime of the Envoy.
 Also reads production from individual inverters if supported.
@@ -11,6 +11,3 @@ This reader uses a JSON endpoint on the Envoy gateway:
 - Envoy S: http://envoy/production.json
 
 For older Envoy with software before R3.9, data is collected from html at http://envoy/production
-
-### Known issues
-* Envoy firmware D7.x.x and above are not supported right now due to authentication method changed by Enphase.
